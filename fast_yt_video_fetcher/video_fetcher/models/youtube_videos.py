@@ -15,9 +15,16 @@ class YoutubeVideos(AutoTimestampedModel):
     class Meta:
         db_table = "yt_videos"
         ordering = ['-publishing_datetime']
+        indexes = [
+            models.Index(fields=['title', ]),
+            models.Index(fields=['description', ]),
+        ]
 
     @staticmethod
     def create_videos(yt_video_id, title, description, publishing_datetime, thumbnails, channel_title):
+        """
+            If video is not present in db create the video otherwise get the video
+        """
         video, created = YoutubeVideos.objects.get_or_create(youtube_video_id=yt_video_id,
                                                              title=title,
                                                              description=description,
@@ -27,3 +34,15 @@ class YoutubeVideos(AutoTimestampedModel):
                                                              )
         if created:
             video.save()
+
+
+    @staticmethod
+    def save_videos_from_youtube_response(yt_response):
+        for item in yt_response["items"]:
+            yt_video_id = item["id"]["videoId"]
+            title = item["snippet"]["title"]
+            description = item["snippet"]["description"]
+            thumbnails = item["snippet"]["thumbnails"]
+            publishing_datetime = item["snippet"]["publishTime"]
+            channel_title = item["snippet"]["channelTitle"]
+            YoutubeVideos.create_videos(yt_video_id, title, description, publishing_datetime, thumbnails, channel_title)
