@@ -128,9 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# docker test generated files
-drop_shipping/delhivery_csv_files/
-drop_shipping/orders_domain/file_generator/delhivery_csv_files/
-
 .vim
 .vscode
