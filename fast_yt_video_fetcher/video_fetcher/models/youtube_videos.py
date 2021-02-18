@@ -15,6 +15,10 @@ class YoutubeVideos(AutoTimestampedModel):
     class Meta:
         db_table = "yt_videos"
         ordering = ['-publishing_datetime']
+        indexes = [
+            models.Index(fields=['title', ]),
+            models.Index(fields=['description', ]),
+        ]
 
     @staticmethod
     def create_videos(yt_video_id, title, description, publishing_datetime, thumbnails, channel_title):

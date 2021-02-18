@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 def populate_videos_from_yt_task():
     youtube_response = json.loads(
         youtube_service.search_video_data("video", "date", "2021-02-16T00:00:00Z", "cricket", "snippet"))
+    logger.info("youtube api called")
     for item in youtube_response["items"]:
         yt_video_id = item["id"]["videoId"]
         title = item["snippet"]["title"]
