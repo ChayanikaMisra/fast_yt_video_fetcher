@@ -22,6 +22,9 @@ class YoutubeVideos(AutoTimestampedModel):
 
     @staticmethod
     def create_videos(yt_video_id, title, description, publishing_datetime, thumbnails, channel_title):
+        """
+            If video is not present in db create the video otherwise get the video
+        """
         video, created = YoutubeVideos.objects.get_or_create(youtube_video_id=yt_video_id,
                                                              title=title,
                                                              description=description,

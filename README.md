@@ -17,8 +17,8 @@ docker-compose up --build
 ```
 - Find the app running in http://127.0.0.1:8000/admin/
 
-
-
+## Celery task to call youtube API
+  [celery task](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/video_fetcher/tasks/populate_videos_task.py)
 
 ## API Doc:
 - http://{base url}/api/v1/videos/?page_size=1
