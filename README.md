@@ -1,6 +1,10 @@
 # fast youtube video fetcher
 
-
+- Calls youtube API in the background using [CELERY_BEAT_SCHEDULE](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/service_config/settings.py#L135)
+- Creates and stores youtube API response videos in database [youtube_video] ()
+- Exposes a GET API for users to fetch latest videos [fetch_videos_api](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/video_fetcher/api/views/videos_viewset.py#L19)
+- Exposes a search API for users to search using title and description [search_api](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/video_fetcher/api/views/videos_viewset.py#L29)
+- Find the API cURL [here](https://github.com/ChayanikaMisra/fast_yt_video_fetcher#api-doc)
 
 ## Local Setup
 - Go into the fast_yt_video_fetcher
@@ -19,6 +23,8 @@ docker-compose up --build
 
 ## Celery task to call youtube API
   [celery task](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/video_fetcher/tasks/populate_videos_task.py)
+
+This task is called at an interval of 10s using celery beat scheduler [CELERY_BEAT_SCHEDULE](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/service_config/settings.py#L135)
 
 ## API Doc:
 - http://{base url}/api/v1/videos/?page_size=1

@@ -34,3 +34,15 @@ class YoutubeVideos(AutoTimestampedModel):
                                                              )
         if created:
             video.save()
+
+
+    @staticmethod
+    def save_videos_from_youtube_response(yt_response):
+        for item in yt_response["items"]:
+            yt_video_id = item["id"]["videoId"]
+            title = item["snippet"]["title"]
+            description = item["snippet"]["description"]
+            thumbnails = item["snippet"]["thumbnails"]
+            publishing_datetime = item["snippet"]["publishTime"]
+            channel_title = item["snippet"]["channelTitle"]
+            YoutubeVideos.create_videos(yt_video_id, title, description, publishing_datetime, thumbnails, channel_title)
