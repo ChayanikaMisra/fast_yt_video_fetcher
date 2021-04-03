@@ -1,15 +1,16 @@
 # fast youtube video fetcher
 
-- Calls youtube API in the background using [CELERY_BEAT_SCHEDULE](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/service_config/settings.py#L135)
-- Creates and stores youtube API response videos in database [youtube_video] ()
+- Calls youtube API using **publish_after=(current_day minus 2 day)** in the background using [CELERY_BEAT_SCHEDULE](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/service_config/settings.py#L135)
+- Creates and stores youtube API response videos in database [youtube_video](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/update-readme/fast_yt_video_fetcher/video_fetcher/models/youtube_videos.py#L40)
 - Exposes a GET API for users to fetch latest videos [fetch_videos_api](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/video_fetcher/api/views/videos_viewset.py#L19)
 - Exposes a search API for users to search using title and description [search_api](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/video_fetcher/api/views/videos_viewset.py#L29)
-- Find the API cURL [here](https://github.com/ChayanikaMisra/fast_yt_video_fetcher#api-doc)
+- Find the APIs cURL [here](https://github.com/ChayanikaMisra/fast_yt_video_fetcher#api-doc)
+- Dashboard: [here](http://127.0.0.1:8000/admin/)
 
 ## Local Setup
-- Go into the fast_yt_video_fetcher
+- Go into the fast_yt_video_fetcher/fast_yt_video_fetcher/
 ```
-cd fast_yt_video_fetcher
+cd fast_yt_video_fetcher/fast_yt_video_fetcher/
 ```
 - Create django admin superuser
 ```
@@ -20,11 +21,21 @@ python manage.py createsuperuser <username>
 docker-compose up --build
 ```
 - Find the app running in http://127.0.0.1:8000/admin/
+- Login to the dashboard using the superuser credentials to view the videos
+
+
+**In case ```docker-compose up``` does not populate the db**
+Run these commands:
+```
+python manage.py runserver
+```
+```
+celery -A service_config worker -B -l info
+```
 
 ## Celery task to call youtube API
-  [celery task](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/video_fetcher/tasks/populate_videos_task.py)
-
-This task is called at an interval of 10s using celery beat scheduler [CELERY_BEAT_SCHEDULE](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/service_config/settings.py#L135)
+- Async task which calls youtube API [celery task](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/video_fetcher/tasks/populate_videos_task.py)
+- This task is called at an interval of 10s using celery beat scheduler [CELERY_BEAT_SCHEDULE](https://github.com/ChayanikaMisra/fast_yt_video_fetcher/blob/master/fast_yt_video_fetcher/service_config/settings.py#L135)
 
 ## API Doc:
 - http://{base url}/api/v1/videos/?page_size=1
